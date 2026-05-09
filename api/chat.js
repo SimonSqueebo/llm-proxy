@@ -31,3 +31,23 @@ export default async function handler(req, res) {
     });
   }
 }
+export async function POST(req: Request) {
+  try {
+    console.log("route hit");
+
+    const body = await req.json();
+    console.log("body:", body);
+
+    console.log("api key exists:", !!process.env.OPENAI_API_KEY);
+
+    // your ai call here
+
+  } catch (err) {
+    console.error("CHAT ERROR:", err);
+
+    return Response.json(
+      { error: String(err) },
+      { status: 500 }
+    );
+  }
+}
