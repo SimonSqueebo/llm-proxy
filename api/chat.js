@@ -2,14 +2,16 @@ export default async function handler(req, res) {
   try {
     const { prompt } = req.body;
 
-    const response = await fetch(process.env.LLM_BASE_URL, {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.LLM_API_KEY}`,
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "force-claude-haiku-4.5",
+        model: "claude-3-5-haiku-latest",
+        max_tokens: 1024,
         messages: [
           {
             role: "user",
@@ -22,7 +24,10 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     res.status(200).json(data);
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      error: err.message
+    });
   }
 }
